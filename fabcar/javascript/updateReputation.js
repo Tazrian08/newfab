@@ -56,12 +56,9 @@ async function main( params ) {
             return user && user.role === 'admin';
           }
 
-
           if (!isAdmin(nid)) {
-
             throw new Error('Only admins can update the company reputation');
-          
-          }
+        }
           
 
   
@@ -79,9 +76,9 @@ async function main( params ) {
         await gateway.disconnect();
 
     } 
-    catch (error) {
-        console.error(`Failed to change owner transaction: ${error}`);
-        process.exit(1);
+     catch (error) {
+        console.error(`Failed to change owner transaction: ${error.message}`);
+        return Promise.reject(error);
     }
 }
 
