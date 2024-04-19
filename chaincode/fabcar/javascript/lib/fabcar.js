@@ -91,6 +91,8 @@ class FabCar extends Contract {
         console.log(carAsBytes.toString());
         return carAsBytes.toString();
     }
+  
+    
 
     async createCar(ctx, carNumber, name, type, cof, cif, count, country, reputation) {
         console.info('============= START : Create Car ===========');
@@ -129,7 +131,7 @@ class FabCar extends Contract {
         return JSON.stringify(allResults);
     }
 
-    async changeCarOwner(ctx, carNumber, newOwner) {
+    async changeCarOwner(ctx, carNumber, newName) {
         console.info('============= START : changeCarOwner ===========');
 
         const carAsBytes = await ctx.stub.getState(carNumber); // get the car from chaincode state
@@ -137,7 +139,7 @@ class FabCar extends Contract {
             throw new Error(`${carNumber} does not exist`);
         }
         const car = JSON.parse(carAsBytes.toString());
-        car.owner = newOwner;
+        car.name = newName;
 
         await ctx.stub.putState(carNumber, Buffer.from(JSON.stringify(car)));
         console.info('============= END : changeCarOwner ===========');
