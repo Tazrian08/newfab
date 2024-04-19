@@ -37,7 +37,9 @@ app.get('/get-car', function (req, res) {
                     Record: {
                         ...parsedData
                     }
-                }
+                },
+
+ 
             ]
             res.send( carList )
             return
