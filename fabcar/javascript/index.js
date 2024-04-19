@@ -6,6 +6,7 @@ const cors = require('cors')
 const query = require('./query');
 const createCar = require('./createCar')
 const changeOwner = require('./changeOwner')
+const updateReputation = require('./updateReputation')
 const bodyParser = require('body-parser')
 
 
@@ -59,6 +60,17 @@ app.post('/create', function (req, res) {
     createCar.main( req.body  )
     .then(result => {
         res.send({message: 'Created successfully'})
+    })
+    .catch(err => {
+        console.error({ err })
+        res.send('FAILED TO LOAD DATA!')
+    })
+})
+
+app.post('/reputation', function (req, res) {
+    updateReputation.main( req.body  )
+    .then(result => {
+        res.send({message: 'Updated successfully'})
     })
     .catch(err => {
         console.error({ err })

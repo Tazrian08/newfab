@@ -12,7 +12,7 @@ class FabCar extends Contract {
 
     async initLedger(ctx) {
         console.info('============= START : Initialize Ledger ===========');
-        const cars = [
+          const cars = [
             {
                 color: 'blue',
                 make: 'Toyota',
@@ -75,9 +75,14 @@ class FabCar extends Contract {
             },
         ];
 
+        for (let i = 0; i < users.length; i++) {
+            users[i].docType = 'user';
+            await ctx.stub.putState('USER' + i, Buffer.from(JSON.stringify(users[i])));
+            console.info('Added <--> ', users[i]);
+        }
         for (let i = 0; i < cars.length; i++) {
-            cars[i].docType = 'car';
-            await ctx.stub.putState('CAR' + i, Buffer.from(JSON.stringify(cars[i])));
+            cars[i].docType = 'user';
+            await ctx.stub.putState('USER' + i, Buffer.from(JSON.stringify(cars[i])));
             console.info('Added <--> ', cars[i]);
         }
         console.info('============= END : Initialize Ledger ===========');
@@ -140,6 +145,21 @@ class FabCar extends Contract {
         }
         const car = JSON.parse(carAsBytes.toString());
         car.name = newName;
+
+        await ctx.stub.putState(carNumber, Buffer.from(JSON.stringify(car)));
+        console.info('============= END : changeCarOwner ===========');
+    }
+
+
+    async updateReputation(ctx, carNumber, newrep) {
+        console.info('============= START : changeCarOwner ===========');
+
+        const carAsBytes = await ctx.stub.getState(carNumber); // get the car from chaincode state
+        if (!carAsBytes || carAsBytes.length === 0) {
+            throw new Error(`${carNumber} does not exist`);
+        }
+        const car = JSON.parse(carAsBytes.toString());
+        car.reputation = newrep;
 
         await ctx.stub.putState(carNumber, Buffer.from(JSON.stringify(car)));
         console.info('============= END : changeCarOwner ===========');
