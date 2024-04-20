@@ -14,7 +14,7 @@
         <h1>
             Fabcar
         </h1>
-        <button onclick="getAll()">Get All Car</button>
+        <button onclick="getAll()">Get All Companies</button>
         <span>||</span>
         <input id="search-input" type="text">
         <button onclick="search()">Search</button>
@@ -67,25 +67,45 @@
                 <label for="">Name</label>
                 <input name="name" />
             </div>
-            <!-- <div>
-                <label for="">Company type</label>
-                <input name="type" />
-            </div>
-            <div>
-                <label for="">Employee Count</label>
-                <input name="count" />
-            </div>
-            <div>
-                <label for="">Country</label>
-                <input name="country" />
-            </div> -->
-
             <div>
                 <button type="submit">Update</button>
             </div>
         </form>
     </div>
-    
+    <div class="text-center form-container">
+        <h3 >Update Country Origin</h3>
+        <form id="updateCountry" action="" name="updateCountry">
+            <div>
+                <label for="">Company ID</label>
+                <input name="key" />
+            </div>
+            
+            <div>
+                <label for="">Employee Country</label>
+                <input name="country" />
+            </div>
+            <div>
+                <button type="submit">Update</button>
+            </div>
+        </form>
+    </div>
+    <div class="text-center form-container">
+        <h3 >Update Employee Count</h3>
+        <form id="updateCount" action="" name="updateCount">
+            <div>
+                <label for="">Company ID</label>
+                <input name="key" />
+            </div>
+            
+            <div>
+                <label for="">Employee Count</label>
+                <input name="count" />
+            </div>
+            <div>
+                <button type="submit">Update</button>
+            </div>
+        </form>
+    </div>
     <div class="text-center form-container">
         <h3 >Update Reputation</h3>
         <form id="ReputationForm" action="" name="ReputationCom">
@@ -171,6 +191,66 @@ reputationForm.addEventListener("submit", function(event) {
 });
 
         // UPDATE: CHANGING CAR OWNER
+        const updateCountry = document.getElementById('updateCountry')
+
+        // THIS IS AN EVENT LISTENER WHICH WILL RUN WHEN WE CLICK THE UPDATE BUTTON
+        updateCountry.addEventListener("submit", function(event) {
+            event.preventDefault()
+            const bodyParam = new URLSearchParams( new FormData(updateCountry) )
+            
+                //CALLING UPDATE API
+                fetch('http://localhost:3000/updateCountry', {
+                    method: 'POST',
+                    body: bodyParam
+                })
+                .then(res => {
+                    if(res.status !== 200){
+                        alert('Unable to update')
+                        return
+                    }
+                    return res.json()
+                })
+                .then( parsedRes => {
+                    alert( parsedRes.message )
+                    getAll()
+                })
+                .catch(err => {
+                    alert(err.message)
+                    console.error({ err })
+                })
+        });
+        
+        // UPDATE: CHANGING CAR OWNER
+        const updateCount = document.getElementById('updateCount')
+
+        // THIS IS AN EVENT LISTENER WHICH WILL RUN WHEN WE CLICK THE UPDATE BUTTON
+        updateCount.addEventListener("submit", function(event) {
+            event.preventDefault()
+            const bodyParam = new URLSearchParams( new FormData(updateCount) )
+            
+                //CALLING UPDATE API
+                fetch('http://localhost:3000/updateCount', {
+                    method: 'POST',
+                    body: bodyParam
+                })
+                .then(res => {
+                    if(res.status !== 200){
+                        alert('Unable to update')
+                        return
+                    }
+                    return res.json()
+                })
+                .then( parsedRes => {
+                    alert( parsedRes.message )
+                    getAll()
+                })
+                .catch(err => {
+                    alert(err.message)
+                    console.error({ err })
+                })
+        });
+        
+        // UPDATE: CHANGING CAR OWNER
         const updateForm = document.getElementById('updateForm')
 
         // THIS IS AN EVENT LISTENER WHICH WILL RUN WHEN WE CLICK THE UPDATE BUTTON
@@ -199,7 +279,6 @@ reputationForm.addEventListener("submit", function(event) {
                     console.error({ err })
                 })
         });
-
 
         //SEARCH DATA
         function search(){
