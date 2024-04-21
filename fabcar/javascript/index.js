@@ -7,6 +7,7 @@ const query = require('./query');
 const createCar = require('./createCar')
 const changeOwner = require('./changeOwner')
 const updateReputation = require('./updateReputation')
+const updateCOF= require('./updateCOF')
 const bodyParser = require('body-parser')
 
 
@@ -69,6 +70,16 @@ app.post('/create', function (req, res) {
 
 app.post('/reputation', function (req, res) {
     updateReputation.main(req.body)
+        .then(result => {
+            res.send({ message: 'Updated successfully' })
+        })
+        .catch(err => {
+            res.send({ message: "Only valid admins can update this information" });
+        });
+});
+
+app.post('/updateCOF', function (req, res) {
+    updateCOF.main(req.body)
         .then(result => {
             res.send({ message: 'Updated successfully' })
         })

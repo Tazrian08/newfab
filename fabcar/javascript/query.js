@@ -36,10 +36,8 @@ async function main( queryData ) {
 
         // Get the network (channel) our contract is deployed to.
         const network = await gateway.getNetwork('mychannel');
-
         // Get the contract from the network.
         const contract = network.getContract('fabcar');
-
         /// IF QUERY DATA IS AVAILABLE
         if( queryData.key ){
 
@@ -48,6 +46,8 @@ async function main( queryData ) {
 
             return queryResult
          }
+
+ 
 
         // Evaluate the specified transaction.
         // queryAllCars transaction - requires no arguments, ex: ('queryAllCars')

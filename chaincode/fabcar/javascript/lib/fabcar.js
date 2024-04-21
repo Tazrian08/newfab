@@ -86,6 +86,20 @@ class FabCar extends Contract {
         console.info('============= END : changeCarOwner ===========');
     }
 
+    async updateCOF(ctx, carNumber, newCOF) {
+        console.info('============= START : changeCarOwner ===========');
+
+        const carAsBytes = await ctx.stub.getState(carNumber); // get the car from chaincode state
+        if (!carAsBytes || carAsBytes.length === 0) {
+            throw new Error(`${carNumber} does not exist`);
+        }
+        const car = JSON.parse(carAsBytes.toString());
+        car.cof= newCOF;
+
+        await ctx.stub.putState(carNumber, Buffer.from(JSON.stringify(car)));
+        console.info('============= END : changeCarOwner ===========');
+    }
+
 
     async updateReputation(ctx, carNumber, newrep) {
         console.info('============= START : changeCarOwner ===========');

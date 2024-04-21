@@ -96,7 +96,7 @@
 
             <div>
                 <label for="">Company ID</label>
-                <input name="key" />
+                <input id="search-input1" name="key" />
             </div>
             
             <div>
@@ -115,6 +115,34 @@
             </div>
         </form>
     </div>
+
+
+    <div class="text-center form-container">
+        <h3 >Update Cashflow</h3>
+        <form id="updateCOF" action="" name="updateCOF">
+            <div>
+                <label for="">Company ID</label>
+                <input  name="key" />
+                
+            </div>
+            <div>
+                <label for="">Admin NID</label>
+                <input name="nid" />
+            </div>
+
+
+            
+            <div>
+                <label for="">New Cashflow</label>
+                <input name="cof" />
+            </div>
+
+            <div>
+                <button type="submit">Update COF</button>
+            </div>
+        </form>
+    </div>
+
 
 
 
@@ -170,6 +198,32 @@ reputationForm.addEventListener("submit", function(event) {
         })
 });
 
+const updateCOF= document.getElementById('updateCOF')
+
+// THIS IS AN EVENT LISTENER WHICH WILL RUN WHEN WE CLICK THE CREATE BUTTON
+updateCOF.addEventListener("submit", function(event) {
+    event.preventDefault()
+    const bodyParam = new URLSearchParams( new FormData(updateCOF) )
+   
+    
+        //CALLING CREATE API
+
+            fetch('http://localhost:3000/updateCOF', {
+            method: 'POST',
+            body: bodyParam
+        })
+        .then(res => {
+            return res.json()
+        })
+        .then( parsedRes => {
+            alert(parsedRes.message)
+        })
+        .catch(err => {
+            console.error({ err })
+        })
+
+});
+
         // UPDATE: CHANGING CAR OWNER
         const updateForm = document.getElementById('updateForm')
 
@@ -199,7 +253,7 @@ reputationForm.addEventListener("submit", function(event) {
                     console.error({ err })
                 })
         });
-
+  
 
         //SEARCH DATA
         function search(){
@@ -207,6 +261,8 @@ reputationForm.addEventListener("submit", function(event) {
             const value = document.getElementById('search-input').value
             getAll( value )
         }
+
+
         
         // GETTING ALL CAR DATA FROM API
         function getAll( query ){
@@ -230,6 +286,7 @@ reputationForm.addEventListener("submit", function(event) {
                                 <p>Reputation: ${ item.Record.reputation }</p>
                             </div>`
                     })
+  
                     // getting the html container with id=show-car
                     const carContainer = document.getElementById('show-car')
 
