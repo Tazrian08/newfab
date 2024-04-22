@@ -101,6 +101,19 @@ class FabCar extends Contract {
         console.info('============= END : changeCarOwner ===========');
     }
 
+    async setCIF(ctx, carNumber, newCIF) {
+        console.info('============= START : changeCarOwner ===========');
+
+        const carAsBytes = await ctx.stub.getState(carNumber); // get the car from chaincode state
+        if (!carAsBytes || carAsBytes.length === 0) {
+            throw new Error(`${carNumber} does not exist`);
+        }
+        const car = JSON.parse(carAsBytes.toString());
+        car.cif= newCIF;
+
+        await ctx.stub.putState(carNumber, Buffer.from(JSON.stringify(car)));
+        console.info('============= END : changeCarOwner ===========');
+    }
 
 
     async changeCarOwner(ctx, carNumber, newName) {
@@ -138,7 +151,7 @@ class FabCar extends Contract {
         if (!carAsBytes || carAsBytes.length === 0) {
             throw new Error(`${carNumber} does not exist`);
         }
-        const car = JSON.parse(carAsBytes.toString()); 
+        const car = JSON.parse(carAsBytes.toString());
         car.country = newCountry;
 
         await ctx.stub.putState(carNumber, Buffer.from(JSON.stringify(car)));

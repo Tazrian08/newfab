@@ -39,24 +39,53 @@ async function main( params ) {
 
         // Get the contract from the network.
         const contract = network.getContract('fabcar');
+        const nid = params.nid
         const key = params.key
+        const cif = params.cif
+
+
+
+
+        const users = [
+            { NID: '1', role: 'admin' },
+            { NID: '2', role: 'admin' },
+            { NID: '3', role: 'admin' },
+            // other users
+          ];
+
+          function isAdmin(userNID) {
+            const user = users.find(u => u.NID === userNID);
+            return user && user.role === 'admin';
+          }
+
+          if (!isAdmin(nid)) {
+            throw new Error('Only admins can update the company reputation');
+        }
+
+
+
         // const type = params.type
-        const count = params.count
+        // const count = params.count
+        // const country = params.country
+
+         // Query the current reputation before updating
 
 
 
         // Submit the specified transaction.
         // changeCarOwner transaction - requires 2 args , ex: ('changeCarOwner', 'CAR12', 'Dave')
-        await contract.submitTransaction('changeCount', `${ key }`, `${ count }`)
+        await contract.submitTransaction('setCIF', `${ key }`, `${ cif}`)
         console.log('Change Owner Transaction has been submitted');
 
         // Disconnect from the gateway.
         await gateway.disconnect();
 
+
+
     }
-    catch (error) {
-        console.error(`Failed to change owner transaction: ${error}`);
-        process.exit(1);
+     catch (error) {
+        console.error(`Failed to change owner transaction: ${error.message}`);
+        return Promise.reject(error);
     }
 }
 

@@ -43,7 +43,7 @@ async function main( params ) {
         const key = params.key
         const cof = params.cof
 
-        
+
 
 
         const users = [
@@ -61,15 +61,15 @@ async function main( params ) {
           if (!isAdmin(nid)) {
             throw new Error('Only admins can update the company reputation');
         }
-          
 
-  
+
+
         // const type = params.type
         // const count = params.count
         // const country = params.country
 
          // Query the current reputation before updating
-        
+
 
 
         // Submit the specified transaction.
@@ -82,7 +82,7 @@ async function main( params ) {
 
 
 
-    } 
+    }
      catch (error) {
         console.error(`Failed to change owner transaction: ${error.message}`);
         return Promise.reject(error);
