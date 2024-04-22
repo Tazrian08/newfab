@@ -35,7 +35,7 @@ app.get('/get-car', function (req, res) {
         let carList
 
         // if user search car
-        if(  req.query.key ){
+        if(  req.query.key && req.query.key.startsWith("C") && req.query.key.length==2){
             carList = [
                 {
                     Key: req.query.key,
