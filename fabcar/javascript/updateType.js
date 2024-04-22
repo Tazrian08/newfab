@@ -45,15 +45,21 @@ async function main( params ) {
         // const count = params.count
         // const country = params.country
 
-        const queryResult = await contract.evaluateTransaction('queryCar', key);
-        const currentReputation = queryResult.toString();
-        console.log(`Previous reputation for company ${key}: ${currentReputation}`);
+        const queryResult =  await contract.evaluateTransaction('queryCar', `${ key}`);
+        console.log(`QUERY Transaction has been evaluated, result is: ${queryResult.toString()}`)
+
+        const data=JSON.parse(queryResult.toString());
+        const rep=data.reputation
+
+        if(rep == "Banned"){
+            throw new Error('Company is banned');
+        }
 
 
 
         // Submit the specified transaction.
         // changeCarOwner transaction - requires 2 args , ex: ('changeCarOwner', 'CAR12', 'Dave')
-        await contract.submitTransaction('changeCarOwner', `${ key }`, `${ type }`)
+        await contract.submitTransaction('changeType', `${ key }`, `${ type }`)
         console.log('Change Owner Transaction has been submitted');
 
         // Disconnect from the gateway.
@@ -61,8 +67,8 @@ async function main( params ) {
 
     } 
     catch (error) {
-        console.error(`Failed to change owner transaction: ${error}`);
-        process.exit(1);
+        console.error(`Failed to change owner transaction: ${error.message}`);
+        return Promise.reject(error);
     }
 }
 

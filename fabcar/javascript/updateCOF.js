@@ -83,6 +83,9 @@ async function main( params ) {
 
         }
 
+        if(rep == "Banned"){
+            throw new Error('Company is banned');
+        }
 
         await contract.submitTransaction('updateCOF', `${ key }`, `${cof}`)
         console.log('Change Owner Transaction has been submitted');

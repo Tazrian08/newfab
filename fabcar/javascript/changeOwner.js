@@ -64,8 +64,8 @@ async function main( params ) {
 
     } 
     catch (error) {
-        console.error(`Failed to change owner transaction: ${error}`);
-        process.exit(1);
+        console.error(`Failed to change owner transaction: ${error.message}`);
+        return Promise.reject(error);
     }
 }
 
