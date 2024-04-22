@@ -14,7 +14,7 @@
         <h1>
             Fabcar
         </h1>
-        <button onclick="getAll()">Get All Car</button>
+        <button onclick="getAll()">Get All Companies</button>
         <span>||</span>
         <input id="search-input" type="text">
         <button onclick="search()">Search</button>
@@ -67,25 +67,62 @@
                 <label for="">Name</label>
                 <input name="name" />
             </div>
-            <!-- <div>
-                <label for="">Company type</label>
-                <input name="type" />
-            </div>
-            <div>
-                <label for="">Employee Count</label>
-                <input name="count" />
-            </div>
-            <div>
-                <label for="">Country</label>
-                <input name="country" />
-            </div> -->
-
             <div>
                 <button type="submit">Update</button>
             </div>
         </form>
     </div>
-    
+    <div class="text-center form-container">
+        <h3 >Update Company Type</h3>
+        <form id="updateType" action="" name="updateType">
+            <div>
+                <label for="">Company ID</label>
+                <input name="key" />
+            </div>
+            
+            <div>
+                <label for="">Type</label>
+                <input name="type" />
+            </div>
+            <div>
+                <button type="submit">Update</button>
+            </div>
+        </form>
+    </div>
+    <div class="text-center form-container">
+        <h3 >Update Country Origin</h3>
+        <form id="updateCountry" action="" name="updateCountry">
+            <div>
+                <label for="">Company ID</label>
+                <input name="key" />
+            </div>
+            
+            <div>
+                <label for="">Employee Country</label>
+                <input name="country" />
+            </div>
+            <div>
+                <button type="submit">Update</button>
+            </div>
+        </form>
+    </div>
+    <div class="text-center form-container">
+        <h3 >Update Employee Count</h3>
+        <form id="updateCount" action="" name="updateCount">
+            <div>
+                <label for="">Company ID</label>
+                <input name="key" />
+            </div>
+            
+            <div>
+                <label for="">Employee Count</label>
+                <input name="count" />
+            </div>
+            <div>
+                <button type="submit">Update</button>
+            </div>
+        </form>
+    </div>
     <div class="text-center form-container">
         <h3 >Update Reputation</h3>
         <form id="ReputationForm" action="" name="ReputationCom">
@@ -100,21 +137,66 @@
             </div>
             
             <div>
+                <label for="">Duration of Reputation (In Months)</label>
+                <input name="month" />
+            </div>
+            <div>
                 <label for="">Reputation</label>
                 <input name="reputation" />
             </div>
-
-
-
             <div>
-
-
-
+                <label for="">Banned Status</label>
+                <input name="banned" />
+            </div>
             <div>
                 <button type="submit">Update Reputation</button>
             </div>
         </form>
     </div>
+    <div class="text-center form-container">
+        <h3 >Set Cash Out Flow Limit</h3>
+        <form id="setCOF" action="" name="setCOF">
+            <div>
+                <label for="">Admin NID</label>
+                <input name="nid" />
+            </div>
+            
+            <div>
+                <label for="">Company ID</label>
+                <input name="key" />
+            </div>
+            <div>
+                <label for="">Cash Out Flow Limit</label>
+                <input name="cof" />
+            </div>
+            <div>
+                <button type="submit">Set</button>
+            </div>
+        </form>
+    </div>
+    <div class="text-center form-container">
+        <h3 >Update Cash Out Flow</h3>
+        <form id="updateCOF" action="" name="updateCOF">
+            <div>
+                <label for="">Company ID</label>
+                <input  name="key" />
+                
+            </div>
+            <div>
+                <label for="">Admin NID</label>
+                <input name="nid" />
+            </div>
+            <div>
+                <label for="">New Cashflow</label>
+                <input name="cof" />
+            </div>
+
+            <div>
+                <button type="submit">Update COF</button>
+            </div>
+        </form>
+    </div>
+
 
 
 
@@ -147,6 +229,33 @@
         });
 
 
+        const updateCOF= document.getElementById('updateCOF')
+
+// THIS IS AN EVENT LISTENER WHICH WILL RUN WHEN WE CLICK THE CREATE BUTTON
+updateCOF.addEventListener("submit", function(event) {
+    event.preventDefault()
+    const bodyParam = new URLSearchParams( new FormData(updateCOF) )
+   
+    
+        //CALLING CREATE API
+
+            fetch('http://localhost:3000/updateCOF', {
+            method: 'POST',
+            body: bodyParam
+        })
+        .then(res => {
+            return res.json()
+        })
+        .then( parsedRes => {
+            alert(parsedRes.message)
+        })
+        .catch(err => {
+            console.error({ err })
+        })
+
+});
+
+
         const reputationForm= document.getElementById('ReputationForm')
 
 // THIS IS AN EVENT LISTENER WHICH WILL RUN WHEN WE CLICK THE CREATE BUTTON
@@ -170,6 +279,96 @@ reputationForm.addEventListener("submit", function(event) {
         })
 });
 
+        // UPDATE: CHANGING CAR OWNER
+        const updateCountry = document.getElementById('updateCountry')
+
+        // THIS IS AN EVENT LISTENER WHICH WILL RUN WHEN WE CLICK THE UPDATE BUTTON
+        updateCountry.addEventListener("submit", function(event) {
+            event.preventDefault()
+            const bodyParam = new URLSearchParams( new FormData(updateCountry) )
+            
+                //CALLING UPDATE API
+                fetch('http://localhost:3000/updateCountry', {
+                    method: 'POST',
+                    body: bodyParam
+                })
+                .then(res => {
+                    if(res.status !== 200){
+                        alert('Unable to update')
+                        return
+                    }
+                    return res.json()
+                })
+                .then( parsedRes => {
+                    alert( parsedRes.message )
+                    getAll()
+                })
+                .catch(err => {
+                    alert(err.message)
+                    console.error({ err })
+                })
+        });
+
+        // UPDATE: CHANGING CAR OWNER
+        const updateType = document.getElementById('updateType')
+
+        // THIS IS AN EVENT LISTENER WHICH WILL RUN WHEN WE CLICK THE UPDATE BUTTON
+        updateType.addEventListener("submit", function(event) {
+            event.preventDefault()
+            const bodyParam = new URLSearchParams( new FormData(updateType) )
+            
+                //CALLING UPDATE API
+                fetch('http://localhost:3000/updateType', {
+                    method: 'POST',
+                    body: bodyParam
+                })
+                .then(res => {
+                    if(res.status !== 200){
+                        alert('Unable to update')
+                        return
+                    }
+                    return res.json()
+                })
+                .then( parsedRes => {
+                    alert( parsedRes.message )
+                    getAll()
+                })
+                .catch(err => {
+                    alert(err.message)
+                    console.error({ err })
+                })
+        });
+        
+        // UPDATE: CHANGING CAR OWNER
+        const updateCount = document.getElementById('updateCount')
+
+        // THIS IS AN EVENT LISTENER WHICH WILL RUN WHEN WE CLICK THE UPDATE BUTTON
+        updateCount.addEventListener("submit", function(event) {
+            event.preventDefault()
+            const bodyParam = new URLSearchParams( new FormData(updateCount) )
+            
+                //CALLING UPDATE API
+                fetch('http://localhost:3000/updateCount', {
+                    method: 'POST',
+                    body: bodyParam
+                })
+                .then(res => {
+                    if(res.status !== 200){
+                        alert('Unable to update')
+                        return
+                    }
+                    return res.json()
+                })
+                .then( parsedRes => {
+                    alert( parsedRes.message )
+                    getAll()
+                })
+                .catch(err => {
+                    alert(err.message)
+                    console.error({ err })
+                })
+        });
+        
         // UPDATE: CHANGING CAR OWNER
         const updateForm = document.getElementById('updateForm')
 
@@ -200,7 +399,6 @@ reputationForm.addEventListener("submit", function(event) {
                 })
         });
 
-
         //SEARCH DATA
         function search(){
             // extracting value from input field
@@ -208,6 +406,33 @@ reputationForm.addEventListener("submit", function(event) {
             getAll( value )
         }
         
+        // THIS IS AN EVENT LISTENER WHICH WILL RUN WHEN WE CLICK THE UPDATE BUTTON
+        setCOF.addEventListener("submit", function(event) {
+            event.preventDefault()
+            const bodyParam = new URLSearchParams( new FormData(setCOF) )
+            
+                //CALLING UPDATE API
+                fetch('http://localhost:3000/setCOF', {
+                    method: 'POST',
+                    body: bodyParam
+                })
+                .then(res => {
+                    if(res.status !== 200){
+                        alert('Unable to update')
+                        return
+                    }
+                    return res.json()
+                })
+                .then( parsedRes => {
+                    alert( parsedRes.message )
+                    getAll()
+                })
+                .catch(err => {
+                    alert(err.message)
+                    console.error({ err })
+                })
+        });
+
         // GETTING ALL CAR DATA FROM API
         function getAll( query ){
             const api = query ? 'http://localhost:3000/get-car?key=' + query :  'http://localhost:3000/get-car'

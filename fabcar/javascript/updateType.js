@@ -39,29 +39,29 @@ async function main( params ) {
 
         // Get the contract from the network.
         const contract = network.getContract('fabcar');
-
-        // gathering payload data
         const key = params.key
-        const name = params.name
+        // const name = params.name
         const type = params.type
-        const cof = ""
-        const cif =""
-        const count = params.count
-        const country = params.country
-        const reputation = ""
-        const cofLimit = 9999999
+        // const count = params.count
+        // const country = params.country
+
+        const queryResult = await contract.evaluateTransaction('queryCar', key);
+        const currentReputation = queryResult.toString();
+        console.log(`Previous reputation for company ${key}: ${currentReputation}`);
+
+
 
         // Submit the specified transaction.
-        // createCar transaction - requires 5 argument, ex: ('createCar', 'CAR12', 'Honda', 'Accord', 'Black', 'Tom')
-        await contract.submitTransaction('createCar', `${ key }`, `${ name }`, `${ type }`, `${ cof }`, `${ cif }`,`${ count }`,`${ country }`,`${ reputation }`, `${ cofLimit }`);
-        console.log('Transaction has been submitted');
+        // changeCarOwner transaction - requires 2 args , ex: ('changeCarOwner', 'CAR12', 'Dave')
+        await contract.submitTransaction('changeCarOwner', `${ key }`, `${ type }`)
+        console.log('Change Owner Transaction has been submitted');
 
         // Disconnect from the gateway.
         await gateway.disconnect();
 
     } 
     catch (error) {
-        console.error(`Failed to create transaction: ${error}`);
+        console.error(`Failed to change owner transaction: ${error}`);
         process.exit(1);
     }
 }

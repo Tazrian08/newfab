@@ -39,30 +39,72 @@ async function main( params ) {
 
         // Get the contract from the network.
         const contract = network.getContract('fabcar');
-
-        // gathering payload data
+        const nid = params.nid
         const key = params.key
-        const name = params.name
-        const type = params.type
-        const cof = ""
-        const cif =""
-        const count = params.count
-        const country = params.country
-        const reputation = ""
-        const cofLimit = 9999999
+        const cof=params.cof
+
+
+        const users = [
+            { NID: '1', role: 'admin' },
+            { NID: '2', role: 'admin' },
+            { NID: '3', role: 'admin' },
+            // other users
+          ];
+
+          function isAdmin(userNID) {
+            const user = users.find(u => u.NID === userNID);
+            return user && user.role === 'admin';
+          }
+
+          if (!isAdmin(nid)) {
+            throw new Error('Only admins can update the company reputation');
+        }
+          
+
+  
+        // const type = params.type
+        // const count = params.count
+        // const country = params.country
+        const queryResult =  await contract.evaluateTransaction('queryCar', `${ key}`);
+        console.log(`QUERY Transaction has been evaluated, result is: ${queryResult.toString()}`)
+
+        const data=JSON.parse(queryResult.toString());
+
+
+        const rep=data.reputation
+        const limit = data.cofLimit
+        console.log(parseInt(cof))
+        console.log(parseInt(limit))
+        
+
+        if (rep.toLowerCase()!="poor" || parseInt(cof) > parseInt(limit)){
+
+        throw new Error('Reputation not poor');
+
+        }
+
+
+        await contract.submitTransaction('updateCOF', `${ key }`, `${cof}`)
+        console.log('Change Owner Transaction has been submitted');
+
+
+
+
+
+
 
         // Submit the specified transaction.
-        // createCar transaction - requires 5 argument, ex: ('createCar', 'CAR12', 'Honda', 'Accord', 'Black', 'Tom')
-        await contract.submitTransaction('createCar', `${ key }`, `${ name }`, `${ type }`, `${ cof }`, `${ cif }`,`${ count }`,`${ country }`,`${ reputation }`, `${ cofLimit }`);
-        console.log('Transaction has been submitted');
+        // changeCarOwner transaction - requires 2 args , ex: ('changeCarOwner', 'CAR12', 'Dave')
+        // await contract.submitTransaction('updateCOF', `${ key }`, `${cof}`)
+        // console.log('Change Owner Transaction has been submitted');
 
         // Disconnect from the gateway.
         await gateway.disconnect();
 
     } 
-    catch (error) {
-        console.error(`Failed to create transaction: ${error}`);
-        process.exit(1);
+     catch (error) {
+        console.error(`Failed to change owner transaction: ${error.message}`);
+        return Promise.reject(error);
     }
 }
 

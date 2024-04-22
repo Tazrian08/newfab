@@ -41,7 +41,10 @@ async function main( params ) {
         const contract = network.getContract('fabcar');
         const nid = params.nid
         const key = params.key
-        const reputation=params.reputation
+        var reputation=params.reputation
+        const month=params.month
+        const banned=params.banned
+        
 
 
         const users = [
@@ -60,11 +63,27 @@ async function main( params ) {
             throw new Error('Only admins can update the company reputation');
         }
           
+        if(parseInt(month)>= 3 && reputation.toLowerCase()=="poor" && banned.toLowerCase()=="yes"){
+            reputation = "Banned"
+        }
+
+        const queryResult =  await contract.evaluateTransaction('queryCar', `${ key}`);
+        console.log(`QUERY Transaction has been evaluated, result is: ${queryResult.toString()}`)
+
+        const data=JSON.parse(queryResult.toString());
+        const rep=data.reputation
+
+        if(rep == "Banned"){
+            throw new Error('Company is banned');
+        }
 
   
         // const type = params.type
         // const count = params.count
         // const country = params.country
+
+         // Query the current reputation before updating
+        
 
 
         // Submit the specified transaction.
@@ -74,6 +93,8 @@ async function main( params ) {
 
         // Disconnect from the gateway.
         await gateway.disconnect();
+
+
 
     } 
      catch (error) {

@@ -32,10 +32,10 @@ class FabCar extends Contract {
         console.log(carAsBytes.toString());
         return carAsBytes.toString();
     }
-  
-    
 
-    async createCar(ctx, carNumber, name, type, cof, cif, count, country, reputation) {
+
+
+    async createCar(ctx, carNumber, name, type, cof, cif, count, country, reputation, cofLimit) {
         console.info('============= START : Create Car ===========');
 
         const car = {
@@ -46,7 +46,8 @@ class FabCar extends Contract {
             cif,
             count,
             country,
-            reputation
+            reputation,
+            cofLimit
         };
 
         await ctx.stub.putState(carNumber, Buffer.from(JSON.stringify(car)));
@@ -72,6 +73,36 @@ class FabCar extends Contract {
         return JSON.stringify(allResults);
     }
 
+    async updateCOF(ctx, carNumber, newCOF) {
+        console.info('============= START : changeCarOwner ===========');
+
+        const carAsBytes = await ctx.stub.getState(carNumber); // get the car from chaincode state
+        if (!carAsBytes || carAsBytes.length === 0) {
+            throw new Error(`${carNumber} does not exist`);
+        }
+        const car = JSON.parse(carAsBytes.toString());
+        car.cof= newCOF;
+
+        await ctx.stub.putState(carNumber, Buffer.from(JSON.stringify(car)));
+        console.info('============= END : changeCarOwner ===========');
+    }
+
+    async setCOF(ctx, carNumber, newCOF) {
+        console.info('============= START : changeCarOwner ===========');
+
+        const carAsBytes = await ctx.stub.getState(carNumber); // get the car from chaincode state
+        if (!carAsBytes || carAsBytes.length === 0) {
+            throw new Error(`${carNumber} does not exist`);
+        }
+        const car = JSON.parse(carAsBytes.toString());
+        car.cofLimit= newCOF;
+
+        await ctx.stub.putState(carNumber, Buffer.from(JSON.stringify(car)));
+        console.info('============= END : changeCarOwner ===========');
+    }
+
+
+
     async changeCarOwner(ctx, carNumber, newName) {
         console.info('============= START : changeCarOwner ===========');
 
@@ -86,6 +117,47 @@ class FabCar extends Contract {
         console.info('============= END : changeCarOwner ===========');
     }
 
+    async changeType(ctx, carNumber, newType) {
+        console.info('============= START : changeCarOwner ===========');
+
+        const carAsBytes = await ctx.stub.getState(carNumber); // get the car from chaincode state
+        if (!carAsBytes || carAsBytes.length === 0) {
+            throw new Error(`${carNumber} does not exist`);
+        }
+        const car = JSON.parse(carAsBytes.toString());
+        car.type = newType;
+
+        await ctx.stub.putState(carNumber, Buffer.from(JSON.stringify(car)));
+        console.info('============= END : changeCarOwner ===========');
+    }
+
+    async changeCountry(ctx, carNumber, newCountry) {
+        console.info('============= START : changeCarOwner ===========');
+
+        const carAsBytes = await ctx.stub.getState(carNumber); // get the car from chaincode state
+        if (!carAsBytes || carAsBytes.length === 0) {
+            throw new Error(`${carNumber} does not exist`);
+        }
+        const car = JSON.parse(carAsBytes.toString()); 
+        car.country = newCountry;
+
+        await ctx.stub.putState(carNumber, Buffer.from(JSON.stringify(car)));
+        console.info('============= END : changeCarOwner ===========');
+    }
+
+    async changeCount(ctx, carNumber, newCount) {
+        console.info('============= START : changeCarOwner ===========');
+
+        const carAsBytes = await ctx.stub.getState(carNumber); // get the car from chaincode state
+        if (!carAsBytes || carAsBytes.length === 0) {
+            throw new Error(`${carNumber} does not exist`);
+        }
+        const car = JSON.parse(carAsBytes.toString());
+        car.count = newCount;
+
+        await ctx.stub.putState(carNumber, Buffer.from(JSON.stringify(car)));
+        console.info('============= END : changeCarOwner ===========');
+    }
 
     async updateReputation(ctx, carNumber, newrep) {
         console.info('============= START : changeCarOwner ===========');
