@@ -36,7 +36,7 @@ app.get('/get-car', function (req, res) {
         let carList
 
         // if user search car
-        if(  req.query.key ){
+        if(  req.query.key && req.query.key.startsWith("C") && req.query.key.length==2){
             carList = [
                 {
                     Key: req.query.key,
@@ -78,7 +78,7 @@ app.post('/reputation', function (req, res) {
             res.send({ message: 'Updated successfully' })
         })
         .catch(err => {
-            res.send({ message: "Only valid admins can update this information" });
+            res.send({ message: "Error process failed"});
         });
 });
 
@@ -88,7 +88,7 @@ app.post('/updateCOF', function (req, res) {
             res.send({ message: 'Updated successfully' })
         })
         .catch(err => {
-            res.send({ message: "Only valid admins can update this information" });
+            res.send({ message: "Error process failed"});
         });
 });
 
@@ -98,7 +98,7 @@ app.post('/setCOF', function (req, res) {
             res.send({ message: 'Updated successfully' })
         })
         .catch(err => {
-            res.send({ message: "Only valid admins can update this information" });
+            res.send({ message: "Error process failed" });
         });
 });
 
@@ -119,7 +119,7 @@ app.post('/update', function (req, res) {
         res.send({ message: 'Updated successfully' })
     })
     .catch(err => {
-        res.send({ message: "Only valid admins can update this information" });
+        res.send({ message: "Error process failed" });
     });
 })
 app.post('/updateType', function (req, res) {

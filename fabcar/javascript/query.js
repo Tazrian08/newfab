@@ -43,10 +43,47 @@ async function main( queryData ) {
         /// IF QUERY DATA IS AVAILABLE
         if( queryData.key ){
 
-            const queryResult =  await contract.evaluateTransaction('queryCar', `${ queryData.key }`);
-            console.log(`QUERY Transaction has been evaluated, result is: ${queryResult.toString()}`)
+            var res=[]
 
-            return queryResult
+            if (queryData.key[0]=="C" && queryData.key.length==2){
+
+                const queryResult =  await contract.evaluateTransaction('queryCar', `${ queryData.key }`);
+                console.log(`QUERY Transaction has been evaluated, result is: ${queryResult.toString()}`)
+                
+                return queryResult
+                
+
+
+            }
+
+            else if(queryData.key.length >2){
+
+                const result = await contract.evaluateTransaction('queryAllCars');
+        console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
+
+        const data=JSON.parse(result.toString());
+        
+        
+
+        for (let company of data) {
+            console.log(company.Record.name)
+            if (company.Record.country==queryData.key || company.Record.reputation==queryData.key ){
+                res.push(company)
+                
+                
+
+            }
+          }
+          const res1=JSON.stringify(res)
+          const res2=Buffer.from(res1)
+          console.log(res)
+          return res2
+
+            
+
+            }
+
+ 
          }
 
         // Evaluate the specified transaction.
@@ -56,7 +93,9 @@ async function main( queryData ) {
         // Disconnect from the gateway.
         await gateway.disconnect()
         
+        
         return result
+        
         
     } catch (error) {
         console.error(`Failed to evaluate transaction: ${error}`);
