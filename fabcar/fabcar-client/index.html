@@ -98,7 +98,7 @@
             </div>
             
             <div>
-                <label for="">Employee Country</label>
+                <label for=""> Country</label>
                 <input name="country" />
             </div>
             <div>
@@ -175,19 +175,40 @@
         </form>
     </div>
     <div class="text-center form-container">
+        <h3 >Set Cash In Flow </h3>
+        <form id="setCIF" action="" name="setCIF">
+            <div>
+                <label for="">Admin NID</label>
+                <input name="nid" />
+            </div>
+            
+            <div>
+                <label for="">Company ID</label>
+                <input name="key" />
+            </div>
+            <div>
+                <label for="">Cash In Flow </label>
+                <input name="cif" />
+            </div>
+            <div>
+                <button type="submit">Set</button>
+            </div>
+        </form>
+    </div>
+    <div class="text-center form-container">
         <h3 >Update Cash Out Flow</h3>
         <form id="updateCOF" action="" name="updateCOF">
+            <div>
+                <label for="">Admin NID</label>
+                <input name="nid" />
+            </div>
             <div>
                 <label for="">Company ID</label>
                 <input  name="key" />
                 
             </div>
             <div>
-                <label for="">Admin NID</label>
-                <input name="nid" />
-            </div>
-            <div>
-                <label for="">New Cashflow</label>
+                <label for="">New Cash Out flow</label>
                 <input name="cof" />
             </div>
 
@@ -379,6 +400,32 @@ reputationForm.addEventListener("submit", function(event) {
             
                 //CALLING UPDATE API
                 fetch('http://localhost:3000/update', {
+                    method: 'POST',
+                    body: bodyParam
+                })
+                .then(res => {
+                    if(res.status !== 200){
+                        alert('Unable to update')
+                        return
+                    }
+                    return res.json()
+                })
+                .then( parsedRes => {
+                    alert( parsedRes.message )
+                    getAll()
+                })
+                .catch(err => {
+                    alert(err.message)
+                    console.error({ err })
+                })
+        });
+
+        setCIF.addEventListener("submit", function(event) {
+            event.preventDefault()
+            const bodyParam = new URLSearchParams( new FormData(setCIF) )
+            
+                //CALLING UPDATE API
+                fetch('http://localhost:3000/setCIF', {
                     method: 'POST',
                     body: bodyParam
                 })
